@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/jquery.min.js"></script>
+    <title>App</title>
+    <style type="text/css">
+        body{font-family: Arial, Helvetica, sans-serif;background-image: url("img/fundo.jpg");background-repeat: no-repeat;background-size: cover;background-attachment: fixed;}
+        .container{width: 100vw;height: 30vh;display: flex;width: 100%;align-items: center;justify-content: center;text-align: center;}
+        .menu{display: flex;width: 100%;align-items: center;justify-content: center;text-align: center;}
+        .menu div{cursor: pointer;;color: #fff;padding:25px;border-bottom:rgb(167, 81, 247) 4px solid;background-color: blueviolet;border-radius: 3px;margin: 5px;}
+        .menu div:hover{color: #fff;padding:25px;border-bottom:rgb(187, 120, 250) 4px solid;background-color: rgb(107, 23, 186);border-radius: 3px;margin: 5px;}
+        .fundo-cor{position: absolute;top: 0;left: 0;background-color: rgba(74, 0, 92,0.9);width: 100vw;height: 100vh;}
+        .titulo{width: 100%; text-align: center;height: auto;margin-top: 150px;}
+        .titulo h1{color: rgb(243, 243, 243);font-size: 30px;}
+        .titulo h3{color: rgb(238, 238, 238);font-size: 16px;margin-top: -15px;}
+        .fundo{display: flex;justify-content: center;align-items: center;background-color: rgba(0,0,0,0.5);width: 100vw;height: 100vh;position: fixed;top: 0;left: 0;}
+        .fundo .telas{background-color: #fff;width: 350px; border-radius: 10px;padding: 36px;}
+        input[type=text],input[type=tel],input[type=email]{padding: 10px;border-radius: 3px;height: 35px;border:0;width:90%;margin: 7px;background-color: rgb(245, 245, 245);}
+        input[type=submit]{border: 0; background-color: coral;color: #fff;width: 200px;height: 45px;margin-left: 8px;}
+        tbody{font-size: 12px;}
+        table{width: 100%;}
+        thead{text-align: center;background-color: rgb(203, 204, 204);color: rgb(46, 46, 46);font-size: 18px;}
+        .fundo, .fundo>div{display: none;}
+    </style>
+</head>
+<body>
+<div class="fundo-cor">
+    <div class="titulo">
+        <h1>Sistema de gerenciamento</h1>
+        <h3>controle de cadastro de alunos</h3>
+    </div>
+    <div class="container">
+        <div class="menu">
+            <div>Novo cadastro</div>
+            <div>Alterar cadastro</div>
+            <div>Excluir cadastro</div>
+            <div>Visualizar</div>
+        </div>
+    </div>
+
+    <div class="fundo">
+        <div class="telas">
+            <form id="form-cadastro">
+                <h3 class="titulo-tela">Novo Cadastro</h3>
+                <input type="text" name="nome" placeholder="Digite seu nome">
+                <input type="text" name="tel" placeholder="Digite seu telefone" id="telefone" />
+                <input type="text" name="cpf" placeholder="Digite seu cpf" autocomplete="no" id="cpf">
+                <input type="submit" name="" value=" Cadastrar ">
+            </form>
+        </div>
+        
+        <div class="telas">
+            <h3 class="titulo-tela">Alterar</h3>
+            <div style="width: 100%;height: 200px;overflow-x: hidden;overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>ID</td>
+                            <td>Nome</td>
+                            <td>Telefone</td>
+                            <td>CPF</td>
+                            <td>#</td>
+                        </tr>
+                    </thead>
+                    <tbody id="dadoss">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="telas">
+            <form id="form-editar">
+                <h3 class="titulo-tela">Alterar registro</h3>
+                <input type="text" id="nome" name="nome" placeholder="Digite seu nome">
+                <input type="text" name="tel" id="tel" placeholder="Digite seu telefone" id="telefone" />
+                <input type="text" name="cpf" id="editarcpf" placeholder="Digite seu cpf" autocomplete="no" id="cpf">
+                <input type="submit" name="" value=" Alterar ">
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+
+    //Menu controle
+    const menuCadastro = document.querySelectorAll(".menu div");
+    var bgPreto        = document.querySelector(".fundo");
+    var odp            = document.querySelectorAll(".telas");
+    var pos            = 0;
+
+    function formatCPF(cpfusu){
+       return cpfusu.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    }
+
+    function formatTel(tel){
+        if(tel.length == 8 ){
+            return tel.replace(/^(\d{4})(\d{4})/, "$1-$2");
+        }else if(tel.length == 9 ){
+            return tel.replace(/^(\d{5})(\d{4})/, "$1-$2");
+        }else if(tel.length == 11){
+            return tel.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+        }else{
+            alert("Número incorreto");
+            return tel;
+        }
+    }
+
+    function editar(ids){
+        bgPreto.style.display="block";
+        odp[2].style.display="block";
+        odp[1].style.display="none";
+        bgPreto.style.display="flex";
+        $.get("http://localhost/github-projetos/teste-aplicacao/api/?id="+ids+"",function(ddos){
+            document.querySelector("#nome").value=ddos.nome;  
+            document.querySelector("#tel").value=ddos.telefone;  
+            document.querySelector("#editarcpf").value=ddos.cpf;
+        });
+    }
+
+    function reJson(){
+        $.get("http://localhost/github-projetos/teste-aplicacao/api",function(result){
+            var trs = "";
+            for(var i=0;i<result.length;i++){
+                trs +="<tr>";
+                trs += "<td>"+result[i].id+"</td>";
+                trs += "<td>"+result[i].nome+"</td>";
+                trs += "<td>"+result[i].telefone+"</td>";
+                trs += "<td>"+result[i].cpf+"</td>";
+                trs += "<td><input type='button' value=' Editar ' onclick=';editar("+result[i].id+");' /></td>";
+                trs += "</tr>";
+            }
+            $("#dadoss").html(trs);         
+        });
+    }
+
+    menuCadastro[0].onclick=function(){
+        for(var t=0;t<odp.length;t++){
+            odp[t].style.display="none";
+        }
+        bgPreto.style.display="block";
+        bgPreto.style.display="flex";
+        odp[0].style.display="block";
+    }
+    menuCadastro[1].onclick=function(){
+        for(var t=0;t<odp.length;t++){
+            odp[t].style.display="none";
+        }
+        
+        bgPreto.style.display="block";
+        bgPreto.style.display="flex";
+        odp[1].style.display="block";
+        reJson();
+    }
+    
+    $(document).ready(function(){
+        const cad = $("#form-cadastro");
+        cad.submit(function(){
+            
+            var dados_compl = $(this).serialize();
+            $.post("api/",dados_compl);
+            alert("Enviado com sucesso!");
+            return false;
+        });
+
+        const cpf = $("#cpf");
+        cpf.blur(function(){
+            $(this).val(formatCPF($(this).val()));
+        });
+
+        var tell = $("#telefone");
+        tell.blur(function(){
+            $(this).val(formatTel($(this).val()));
+        });
+
+    });
+</script>
+</body>
+</html>

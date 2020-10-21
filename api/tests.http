@@ -1,0 +1,15 @@
+GET http://localhost/github-projetos/teste-aplicacao/api
+###
+
+
+GET http://localhost/github-projetos/teste-aplicacao/api/?id=17
+###
+
+POST http://localhost/github-projetos/teste-aplicacao/api/?nome=Batatinha&tel=22222222&cpf=999955555
+###
+
+PUT http://localhost/github-projetos/teste-aplicacao/api/?nome=Jonas+Climber&tel=66666666&cpf=666666666&id=2
+###
+
+DELETE http://localhost/github-projetos/teste-aplicacao/api/?id=15
+###
