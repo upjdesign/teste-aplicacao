@@ -3,6 +3,7 @@
 
 function updateStudents($data, $id){
     extract($data);
+
     return query("update `pessoa`
             set
                 nome='$nome',

@@ -25,7 +25,13 @@ if($method === 'DELETE'){
 }
 
 if($method === 'POST'){
-    insertStudents($_REQUEST);
+        if(isset($_POST['matricula'])){
+            insertMatricula($_REQUEST);
+            exit;
+        }else{
+            insertStudents($_REQUEST);
+            exit;
+        }
 }
 
 if($method === 'PUT'){

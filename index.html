@@ -16,13 +16,14 @@
         .titulo h1{color: rgb(243, 243, 243);font-size: 30px;}
         .titulo h3{color: rgb(238, 238, 238);font-size: 16px;margin-top: -15px;}
         .fundo{display: flex;justify-content: center;align-items: center;background-color: rgba(0,0,0,0.5);width: 100vw;height: 100vh;position: fixed;top: 0;left: 0;}
-        .fundo .telas{background-color: #fff;width: 350px; border-radius: 10px;padding: 36px;}
+        .fundo .telas{background-color: #fff;width: 50%; border-radius: 10px;padding: 36px;}
         input[type=text],input[type=tel],input[type=email]{padding: 10px;border-radius: 3px;height: 35px;border:0;width:90%;margin: 7px;background-color: rgb(245, 245, 245);}
-        input[type=submit]{border: 0; background-color: coral;color: #fff;width: 200px;height: 45px;margin-left: 8px;}
+        input[type=submit],.button-person{border: 0; background-color: coral;color: #fff;width: 200px;height: 45px;margin-left: 8px;}
         tbody{font-size: 12px;}
         table{width: 100%;}
         thead{text-align: center;background-color: rgb(203, 204, 204);color: rgb(46, 46, 46);font-size: 18px;}
         .fundo, .fundo>div{display: none;}
+        .fechar{cursor: pointer;padding-left: 10px;padding-right: 10px;padding-top: 5px;padding-bottom: 5px;border-radius: 50%;background-color: rgb(243, 101, 53);color: #fff;position: absolute;top: 45px;right: 45px;display: block !important;}
     </style>
 </head>
 <body>
@@ -41,6 +42,9 @@
     </div>
 
     <div class="fundo">
+        <div class="fechar">
+            x
+        </div>
         <div class="telas">
             <form id="form-cadastro">
                 <h3 class="titulo-tela">Novo Cadastro</h3>
@@ -71,13 +75,94 @@
         </div>
         
         <div class="telas">
-            <form id="form-editar">
+            <form id="login-form">
                 <h3 class="titulo-tela">Alterar registro</h3>
-                <input type="text" id="nome" name="nome" placeholder="Digite seu nome">
-                <input type="text" name="tel" id="tel" placeholder="Digite seu telefone" id="telefone" />
-                <input type="text" name="cpf" id="editarcpf" placeholder="Digite seu cpf" autocomplete="no" id="cpf">
-                <input type="submit" name="" value=" Alterar ">
+                <input type="text" id="nomes" readonly name="nome" placeholder="Digite seu nome">
+                <input type="text" name="telefone" id="telefones" readonly placeholder="Digite seu telefone" id="telefone" />
+                <input type="text" name="cpf" id="editarcpf" readonly placeholder="Digite seu cpf" autocomplete="no" id="cpf">
+                <input type="button" class="button-person" id="salvar" name="" value=" Salvar ">
+                <input type="button" class="button-person" id="editar" name="" style="width: 25%;background-color: darkcyan;" value=" Editar ">
             </form>
+        </div>
+
+        <div class="telas">
+            <h3 class="titulo-tela">Exclusão de dados</h3>
+            <div style="width: 100%;height: 200px;overflow-x: hidden;overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>ID</td>
+                            <td>Nome</td>
+                            <td>Telefone</td>
+                            <td>CPF</td>
+                            <td>#</td>
+                        </tr>
+                    </thead>
+                    <tbody id="dadosexcluir">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="telas">
+            <h3 class="titulo-tela">Visualizar dados</h3>
+            <div style="width: 100%;height: 200px;overflow-x: hidden;overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>ID</td>
+                            <td>Nome</td>
+                            <td>Telefone</td>
+                            <td>CPF</td>
+                            <td>#</td>
+                        </tr>
+                    </thead>
+                    <tbody id="dadosvisualizar">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="telas">
+            <h3 class="titulo-tela">Matricular aluno</h3>
+            <div style="display: flex;width: 100%;height: auto;overflow-x: hidden;overflow-y: auto;">
+                <div id="nome-aluno"></div>
+            </div>
+            <div id="disciplinas">
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Codigo matricula</td>
+                                <td>Nome da disciplina</td>
+                                <td>Adicionar</td>
+                            </tr>
+                        </thead>
+                        <tbody id="dadosdisciplina">
+                        </tbody>
+                    </table>
+                    <div id="discpli">
+                    </div>
+                    <input type="submit" class="button-person" id="matriculados" value=" Visualizar Matriculados " id="curso" />
+                
+            </div>
+        </div>
+        <div class="telas">
+            <h3 class="titulo-tela">Matriculados</h3>
+            <div style="display: flex;width: 100%;height: auto;overflow-x: hidden;overflow-y: auto;">
+                <div id="nome-aluno"></div>
+            </div>
+            <div id="disciplinas">
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Codigo matricula</td>
+                                <td>Nome da disciplina</td>
+                                <td>#</td>
+                            </tr>
+                        </thead>
+                        <tbody id="dadosmatriculados">
+                        </tbody>
+                    </table>
+            </div>
         </div>
     </div>
 </div>
@@ -113,13 +198,77 @@
         odp[1].style.display="none";
         bgPreto.style.display="flex";
         $.get("http://localhost/github-projetos/teste-aplicacao/api/?id="+ids+"",function(ddos){
-            document.querySelector("#nome").value=ddos.nome;  
-            document.querySelector("#tel").value=ddos.telefone;  
-            document.querySelector("#editarcpf").value=ddos.cpf;
+           var nom = document.querySelector("#nomes");  
+           var tel = document.querySelector("#telefones");  
+           var cpf = document.querySelector("#editarcpf");
+
+           nom.value=ddos.nome;
+           tel.value=ddos.telefone;
+           cpf.value=ddos.cpf;
+           
+           document.querySelector("#editar").onclick=function(){
+                nom.removeAttribute("readonly");
+                tel.removeAttribute("readonly");
+                cpf.removeAttribute("readonly");
+
+                nom.focus();
+           }
+           
+            document.querySelector("#salvar").onclick=function(){
+                const form = new FormData(document.getElementById('login-form'));
+                fetch("http://localhost/github-projetos/teste-aplicacao/api/?nome="+nom.value+"&tel="+tel.value+"&cpf="+cpf.value+"&id="+ddos.id+"", {
+                    method: 'PUT',
+                    body: form,
+                })
+                .then(result=>{
+                    alert("Alteração realizada com sucesso!");
+                })
+            }
         });
     }
 
-    function reJson(){
+    function excluir(ids){
+        let pconrima = confirm("Você deseja realmente esse registro?");
+        if(pconrima){    
+            fetch("http://localhost/github-projetos/teste-aplicacao/api/?id="+ids,{
+                method: 'DELETE'
+            })
+            .then(result=>{
+                reJson("excluir");
+            })
+        }
+    }
+
+    function visua(nomes,id){
+        sairtela();
+        lopso(5);
+        disJson();
+        $("#nome-aluno").html("Nome do aluno: "+nomes);
+        $("#aluno").val(id);
+        localStorage.setItem("idaluno",id);
+
+    }
+
+    $("#form-cadastrar-mat").submit(function(){
+        
+        const formMat = new FormData(document.getElementById('form-cadastrar-mat'));
+        fetch("http://localhost/github-projetos/teste-aplicacao/api/?",{
+            method: 'POST',
+            body: formMat
+        })
+        .then(result=>{
+            alert("Matricula efetuada com sucesso!");
+        })
+        return false;
+    });
+
+    $("#matriculados").click(function(){
+        sairtela();
+        lopso(6);
+        matJson()
+    });
+    function reJson(pa){
+                
         $.get("http://localhost/github-projetos/teste-aplicacao/api",function(result){
             var trs = "";
             for(var i=0;i<result.length;i++){
@@ -128,30 +277,105 @@
                 trs += "<td>"+result[i].nome+"</td>";
                 trs += "<td>"+result[i].telefone+"</td>";
                 trs += "<td>"+result[i].cpf+"</td>";
-                trs += "<td><input type='button' value=' Editar ' onclick=';editar("+result[i].id+");' /></td>";
+                if(pa == "editar"){
+                    trs += "<td><input type='button' value=' Editar ' onclick='editar("+result[i].id+");' /></td>";
+                }else if(pa == "excluir"){
+                    trs += "<td><input type='button' value=' Excluir ' onclick='excluir("+result[i].id+");' /></td>";
+                }else if(pa == "visualizar"){
+                    trs += "<td><input type='button' value=' Acessar ' onclick='visua("+JSON.stringify(result[i].nome)+","+result[i].id+");' /></td>";
+                }
                 trs += "</tr>";
             }
-            $("#dadoss").html(trs);         
+            if(pa == "editar"){
+                $("#dadoss").html(trs);
+            }else if(pa == "excluir"){
+                $("#dadosexcluir").html(trs);
+            }else{
+                $("#dadosvisualizar").html(trs);
+            }
+                     
         });
     }
 
-    menuCadastro[0].onclick=function(){
+    var lpo = [];
+    function checar(obdj,obid){
+            if( obdj.checked == true){
+
+               // lpo.push(parseInt(obid));
+                $.post("http://localhost/github-projetos/teste-aplicacao/api/",
+                {matricula:"",disciplina:obid,idaluno:localStorage.getItem("idaluno")});
+                alert("Disciplina adicionada com sucesso!");
+            }else{
+                
+                $.get("http://localhost/github-projetos/teste-aplicacao/api/?deletemat=&id="+obid,function(data){
+                    alert(data);
+                });
+            }
+            
+    }
+
+    function disJson(){
+        $.get("http://localhost/github-projetos/teste-aplicacao/api/?curso",function(result){
+            var trs = "";
+            for(var i=0;i<result.length;i++){
+                trs +="<tr>";
+                trs += "<td>"+result[i].id_matricula+"</td>";
+                trs += "<td>"+result[i].nome_curso+"</td>";
+                trs += "<td><input type='checkbox' value='"+result[i].id_matricula+"' onclick='checar(this,this.value);' class='matpo' /></td>";
+                trs += "</tr>";
+            }
+            $("#dadosdisciplina").html(trs);
+        });
+    }
+
+    function matJson(){
+        $.get("http://localhost/github-projetos/teste-aplicacao/api/?consultmatricula=",function(result){
+            var trs = "";
+            for(var i=0;i<result.length;i++){
+                trs += "<tr>";
+                trs += "<td>"+result[i].nome+"</td>";
+                trs += "<td>"+result[i].nome_curso+"</td>";
+                trs += "<td>"+result[i].id+"</td>";
+                trs += "</tr>";
+            }
+            $("#dadosmatriculados").html(trs);
+        });
+    }
+
+    $(".fechar").click(function(){
+        bgPreto.style.display="none";
+    });
+
+    function lopso(vl){
+        bgPreto.style.display="block";
+        bgPreto.style.display="flex";
+        odp[vl].style.display="block";
+    }
+
+    function sairtela(){
         for(var t=0;t<odp.length;t++){
             odp[t].style.display="none";
         }
-        bgPreto.style.display="block";
-        bgPreto.style.display="flex";
-        odp[0].style.display="block";
+    }
+
+    menuCadastro[0].onclick=function(){
+        sairtela();
+        lopso(0);
     }
     menuCadastro[1].onclick=function(){
-        for(var t=0;t<odp.length;t++){
-            odp[t].style.display="none";
-        }
-        
-        bgPreto.style.display="block";
-        bgPreto.style.display="flex";
-        odp[1].style.display="block";
-        reJson();
+        sairtela();
+        lopso(1);
+        reJson('editar');
+    }
+    menuCadastro[2].onclick=function(){
+        sairtela();
+        lopso(3);
+        reJson('excluir');
+    }
+    menuCadastro[3].onclick=function(){
+        sairtela();
+        lopso(4);
+        reJson('visualizar');
     }
     
     $(document).ready(function(){
