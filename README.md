@@ -3,7 +3,7 @@
  
  Instalação e modo de uso
  
- 1 - passo importe para seu banco mysql ou mariadb o arquivo chamado "banco_teste.sql"
+ 1 - passo importe para seu banco mysql ou mariadb o arquivo chamado "banco_teste.sql".
  2 - baixe todo conteudo dos arquivos e instale em seu servidor
  3 - para usar a api basta colocar em uma pasta ao seu gosto e atraves do modo get poder enviar para o endereço
  que foi instalado na sua pasta.
